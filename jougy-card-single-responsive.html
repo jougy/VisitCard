@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Cartão — João Paulo T. do Val (single-file offline)</title>
+  <meta name="description" content="Cartão de visitas digital — Assessoria de tecnologia e desenvolvimento Fullstack.">
+  <style>
+    *{box-sizing:border-box}
+    :root{
+      --bg:#0b0d12; --fg:#e5e7eb; --muted:#9aa4b2; --border:#1f2937;
+      --card:#0f172a; --card2:#0b1220;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:radial-gradient(1200px 800px at 70% -10%, #1b2335 0%, #0b0d12 40%, #07090d 100%);
+      color:var(--fg);
+      font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;
+      display:flex; align-items:center; justify-content:center;
+      padding: max(16px, var(--safe-top)) max(16px, var(--safe-right)) max(16px, var(--safe-bottom)) max(16px, var(--safe-left));
+    }
+
+    /* --- Responsive sizing via vmin ---
+       We derive a card width from the smaller viewport side (vmin),
+       clamped for readability. This prevents cropping in landscape
+       and ensures everything fits in portrait. */
+    .wrap{width: 100%; max-width: 560px}
+    .scene{
+      /* Pick the tighter of width or height using vmin */
+      --base: min(92vmin, 92vw, 560px);
+      width: var(--base);
+      height: calc(var(--base) * 0.63); /* 86x54 mm ratio */
+      perspective: 1200px;
+      margin-inline: auto;
+    }
+
+    .card{
+      width:100%; height:100%;
+      position:relative;
+      transform-style:preserve-3d;
+      transition: transform 600ms cubic-bezier(.2,.7,.2,1);
+      cursor:pointer;
+    }
+    .card:focus{outline:2px solid #334155; outline-offset:6px; border-radius:16px}
+    .card.is-flipped{ transform: rotateY(180deg) }
+    .card__face{
+      position:absolute; inset:0;
+      border-radius:16px;
+      border:1px solid var(--border);
+      backface-visibility:hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.03);
+      overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .card__face--front{ background:linear-gradient(135deg, var(--card), var(--card2)); }
+    .card__face--back{ background:linear-gradient(160deg, #0b1220, #0a1422 40%, #0f1b33); transform: rotateY(180deg); }
+
+    .front{padding: clamp(16px, 4vmin, 28px); text-align:center}
+    .logo{font-weight:800; font-size: clamp(28px, 8.5vmin, 52px); letter-spacing:.3px; margin-bottom:8px; position:relative}
+    .shine{
+      background: linear-gradient(100deg, #d1d5db 0%, #9ca3af 10%, #f1f5f9 35%, #bfc8d6 50%, #7dd3fc 60%, #93c5fd 70%, #a1a1aa 85%, #f8fafc 100%);
+      background-size: 200% 100%;
+      -webkit-background-clip:text; background-clip:text; color: transparent;
+      animation: sweep 5s linear infinite;
+      filter: drop-shadow(0 2px 6px rgba(147,197,253,.25));
+    }
+    @keyframes sweep{ 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .tag{color:var(--muted); margin:0; font-size: clamp(12px, 3.6vmin, 16px)}
+    .hint{margin-top:8px;color:#7c8aa0;font-size: clamp(10px, 2.6vmin, 12px)}
+
+    .back{padding: clamp(14px, 3.5vmin, 22px); width:100%; height:100%; display:flex; flex-direction:column}
+    .back h2{margin:2px 0 8px; font-size: clamp(14px, 3.6vmin, 18px); color:#dbe3f1; font-weight:700}
+    .buttons{
+      display:grid; gap: clamp(6px, 1.8vmin, 10px);
+      grid-template-columns: 1fr;
+      /* scroll container to guarantee last button visible on short screens */
+      overflow:auto; -webkit-overflow-scrolling: touch;
+      /* reserve space: header + paddings */
+      flex:1; min-height: 0;
+    }
+    .btn{
+      display:block; text-decoration:none; text-align:center;
+      padding: clamp(10px, 2.6vmin, 12px) clamp(12px, 3vmin, 14px);
+      border-radius:12px; border:1px solid var(--border);
+      background:#0f1626; color:var(--fg); font-weight:700;
+      transition: transform .12s ease, background .2s ease, border-color .2s ease;
+      user-select:none; font-size: clamp(13px, 3.2vmin, 16px);
+    }
+    .btn:hover{ transform: translateY(-1px); background:#121a2c; border-color:#2a364a }
+    .btn:active{ transform: translateY(0) scale(.99) }
+    .btn-ghost{ background:transparent }
+
+    .foot{ text-align:center; margin-top:10px; color:#9fb4d8; font-size:12px }
+    @media (prefers-reduced-motion: reduce){ .card{ transition:none } .shine{ animation:none } }
+
+    /* Extra guard: when height is extremely short (e.g., landscape on tiny devices),
+       we slightly reduce the base size to avoid cropping top/bottom. */
+    @media (max-height: 380px){
+      .scene{ --base: min(85vmin, 85vw, 520px); }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="scene" aria-label="Cartão de visitas interativo">
+      <div id="card" class="card" role="button" tabindex="0" aria-pressed="false" aria-live="polite" aria-describedby="hint">
+        <div class="card__face card__face--front">
+          <div class="front">
+            <div class="logo" aria-label="João Paulo T. do Val"><span class="shine">João Paulo T. do Val</span></div>
+            <p class="tag">Assessoria de tecnologia e desenvolvimento Fullstack</p>
+            <p id="hint" class="hint">Clique ou toque para virar</p>
+          </div>
+        </div>
+        <div class="card__face card__face--back">
+          <div class="back">
+            <h2>Contatos</h2>
+            <nav class="buttons">
+              <a class="btn" id="btn-whatsapp" href="https://wa.me/5511992305889?text=Ol%C3%A1%20Jo%C3%A3o!%20Vim%20pelo%20seu%20cart%C3%A3o%20digital." target="_blank" rel="noopener">WhatsApp</a>
+              <a class="btn" id="btn-email" href="mailto:joao.tdoval@gmail.com?subject=Contato&body=Ol%C3%A1%20Jo%C3%A3o%2C" target="_blank" rel="noopener">Email</a>
+              <a class="btn" id="btn-youtube" href="https://www.youtube.com/@Jougy" target="_blank" rel="noopener">YouTube</a>
+              <a class="btn" id="btn-linkedin" href="https://www.linkedin.com/in/joao-paulo-t-val/" target="_blank" rel="noopener">LinkedIn</a>
+              <a class="btn btn-ghost" id="btn-vcf" href="#" download="contact.vcf">Adicionar contato (.vcf)</a>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section>
+    <p class="foot">(os links externos abrem quando houver internet).</p>
+  </main>
+
+  <script>
+    (function(){
+      const card = document.getElementById('card')
+      const toggle = () => {
+        card.classList.toggle('is-flipped')
+        const flipped = card.classList.contains('is-flipped')
+        card.setAttribute('aria-pressed', flipped ? 'true' : 'false')
+      }
+      card.addEventListener('click', toggle)
+      card.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle() }
+      })
+
+      // vCard inline via Blob (download local, 100% offline)
+      const vcard = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        'N:do Val;João Paulo;;;',
+        'FN:João Paulo T. do Val',
+        'ORG:—',
+        'TITLE:Assessoria de tecnologia e desenvolvimento Fullstack',
+        'TEL;TYPE=CELL:+55 11 99230-5889',
+        'EMAIL;TYPE=INTERNET:joao.tdoval@gmail.com',
+        'URL:https://www.youtube.com/@Jougy',
+        'URL:https://www.linkedin.com/in/joao-paulo-t-val/',
+        'END:VCARD'
+      ].join('\\n')
+
+      const btnVcf = document.getElementById('btn-vcf')
+      const makeBlobUrl = () => URL.createObjectURL(new Blob([vcard], {type:'text/vcard'}))
+      let blobUrl = makeBlobUrl()
+      btnVcf.href = blobUrl
+      btnVcf.addEventListener('click', () => {
+        // Recria para evitar expiração em alguns navegadores
+        if(blobUrl) URL.revokeObjectURL(blobUrl)
+        blobUrl = makeBlobUrl()
+        btnVcf.href = blobUrl
+      })
+      window.addEventListener('beforeunload', ()=>{ if(blobUrl) URL.revokeObjectURL(blobUrl) })
+    })()
+  </script>
+</body>
+</html>
