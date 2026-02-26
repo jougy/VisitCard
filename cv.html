@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CV — João Paulo Taddeo do Val</title>
+  <style>
+    :root{
+      --bg0:#0b1220; --bg1:#0f1a33;
+      --paper:#ffffff; --ink:#0b1020; --muted:#5b6478;
+      --line:#e8ecf4;
+      --accent:#5b8cff; --accent2:#22c55e; --accent3:#f59e0b;
+      --chip:#f3f6ff;
+      --shadow: 0 24px 70px rgba(0,0,0,.25);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 600px at 10% 0%, rgba(91,140,255,.35), transparent 60%),
+        radial-gradient(900px 520px at 90% 10%, rgba(34,197,94,.22), transparent 55%),
+        radial-gradient(900px 520px at 80% 90%, rgba(245,158,11,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      padding: 36px 16px;
+    }
+
+    .wrap{max-width:1020px; margin:0 auto; display:flex; justify-content:center;}
+    .paper{
+      width:100%;
+      background:var(--paper);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .paper:before{
+      content:"";
+      position:absolute;
+      inset:-1px;
+      background:
+        radial-gradient(700px 300px at 15% 0%, rgba(91,140,255,.09), transparent 70%),
+        radial-gradient(700px 300px at 85% 8%, rgba(34,197,94,.08), transparent 70%),
+        radial-gradient(700px 300px at 85% 92%, rgba(245,158,11,.08), transparent 70%);
+      pointer-events:none;
+    }
+    .content{position:relative; padding:30px 34px 34px;}
+
+    header{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:18px;
+      align-items:start;
+      padding-bottom:14px;
+      border-bottom:1px solid var(--line);
+    }
+    .name{margin:0; font-size:28px; line-height:1.1; letter-spacing:.2px;}
+    .headline{margin:6px 0 0; color:var(--muted); font-size:14px; line-height:1.4;}
+
+    .contact{
+      text-align:right;
+      font-size:12.5px;
+      color:var(--muted);
+      line-height:1.55;
+    }
+    .contact strong{
+      color:var(--ink);
+      font-weight:650;
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .contact a{color:var(--accent); text-decoration:none;}
+    .contact a:hover{text-decoration:underline;}
+
+    .section{margin-top:16px;}
+    .section h2{
+      margin:0 0 8px;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--ink);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .section h2:after{content:""; height:1px; flex:1; background:var(--line);}
+    .summary{margin:10px 0 0; color:#1a2442; font-size:13.5px; line-height:1.6;}
+
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:14px;}
+    .card{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.82);
+      border-radius:14px;
+      padding:12px 14px;
+    }
+    .card h3{
+      margin:0 0 8px;
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--ink);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;display:inline-block;
+      background:var(--accent);
+      box-shadow:0 0 0 4px rgba(91,140,255,.12);
+    }
+    .dot.g{background:var(--accent2); box-shadow:0 0 0 4px rgba(34,197,94,.12);}
+    .dot.o{background:var(--accent3); box-shadow:0 0 0 4px rgba(245,158,11,.14);}
+
+    ul{margin:0; padding-left:18px; color:#1a2442; line-height:1.55; font-size:13px;}
+    li{margin:6px 0;}
+
+    .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:2px;}
+    .chip{
+      background:var(--chip);
+      border:1px solid #e4eaff;
+      color:#2b3b6b;
+      padding:6px 9px;
+      border-radius:999px;
+      font-size:12px;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    .xp{display:grid; grid-template-columns:1fr; gap:12px; margin-top:10px;}
+    .role{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.88);
+      border-radius:14px;
+      padding:12px 14px;
+    }
+    .role-top{display:flex; align-items:flex-start; justify-content:space-between; gap:12px;}
+    .role-title{margin:0; font-size:14px; font-weight:700; color:var(--ink);}
+    .role-meta{margin:2px 0 0; color:var(--muted); font-size:12.5px; line-height:1.35;}
+    .when{text-align:right; color:var(--muted); font-size:12.5px; white-space:nowrap;}
+    .role ul{margin-top:8px;}
+
+    .cols3{display:grid; grid-template-columns:1.2fr .8fr; gap:18px; margin-top:12px;}
+
+    @media print{
+      body{background:#fff; padding:0;}
+      .paper{box-shadow:none; border-radius:0;}
+      .content{padding:18mm 16mm 16mm;}
+      a{color:#1a2442; text-decoration:none;}
+    }
+
+    @media (max-width:820px){
+      header{grid-template-columns:1fr;}
+      .contact{text-align:left;}
+      .grid{grid-template-columns:1fr;}
+      .cols3{grid-template-columns:1fr;}
+      .when{text-align:left; white-space:normal;}
+      .role-top{flex-direction:column;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <main class="paper" role="document" aria-label="Currículo">
+      <div class="content">
+
+        <header>
+          <div>
+            <h1 class="name">JOÃO PAULO TADDEO DO VAL</h1>
+            <p class="headline">Engenheiro de Software • Full Stack • Dados (Python/Excel) • Rust/Flutter</p>
+          </div>
+          <div class="contact" aria-label="Contato">
+            <strong>Contato</strong><br/>
+            <a href="mailto:joao.tdoval@gmail.com">joao.tdoval@gmail.com</a><br/>
+            <a href="https://linkedin.com/in/joao-paulo-t-val/">linkedin.com/in/joao-paulo-t-val/</a><br/>
+            <a href="https://github.com/jougy">github.com/jougy</a><br/>
+            <a href="https://joaodoval.vercel.app">joaodoval.vercel.app</a>
+          </div>
+        </header>
+
+        <section class="section">
+          <h2>Resumo</h2>
+          <p class="summary">
+            Engenheiro de Computação com experiência em produtos digitais, automação de processos e consultoria de tecnologia.
+            Curto transformar problemas de negócio em soluções simples, mensuráveis e bem documentadas — com comunicação clara
+            com pessoas não técnicas. Atuo principalmente com back-end (Rust/Python), apps web/mobile (Flutter/React) e dados aplicada
+            (Excel avançado + Python), com entregas em multicloud e foco em segurança (RBAC), confiabilidade e performance.
+          </p>
+
+          <div class="grid" aria-label="Resumo técnico em colunas">
+            <div class="card">
+              <h3><span class="dot"></span> Competências</h3>
+              <ul>
+                <li><strong>Back-end:</strong> Rust (Axum), Python, Node/TypeScript, C#, Solidity; APIs REST; Postgres/SQLx</li>
+                <li><strong>Front-end:</strong> Flutter (mobile/web), React, Next.js, Astro</li>
+                <li><strong>Dados/Automação:</strong> Excel/Google Sheets avançado; Python (pandas) para limpeza e indicadores</li>
+                <li><strong>Cloud/DevOps:</strong> Supabase, Cloudflare, Render, Backblaze B2, Docker, GitHub Actions (CI/CD)</li>
+                <li><strong>Arquitetura:</strong> RBAC, modular monolith, documentação técnica, práticas ágeis</li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h3><span class="dot g"></span> Destaques</h3>
+              <ul>
+                <li>Prontuário eletrônico com <strong>CRUD + RBAC</strong> e arquitetura <strong>multicloud</strong> (Render, Supabase, Cloudflare, Backblaze)</li>
+                <li>Assessoria para clínica de fisioterapia (Manaus): economia estimada <strong>~R$70k/ano</strong></li>
+                <li>Automação e analytics para RH/Operações: ciclos de semanas → <strong>2–3 dias</strong> (Excel + Python)</li>
+              </ul>
+              <div class="chips" aria-label="Tecnologias-chave">
+                <span class="chip">Rust</span><span class="chip">Axum</span><span class="chip">Flutter</span>
+                <span class="chip">Supabase</span><span class="chip">Cloudflare</span><span class="chip">Python</span>
+                <span class="chip">Excel</span><span class="chip">CI/CD</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Experiência</h2>
+          <div class="xp">
+            <article class="role">
+              <div class="role-top">
+                <div>
+                  <p class="role-title">Analista de Tecnologia (Dados e Automação) — Mundo Equipamentos</p>
+                  <p class="role-meta">Excel avançado • Python • indicadores • governança de processos</p>
+                </div>
+                <div class="when">fev/2025 – set/2025</div>
+              </div>
+              <ul>
+                <li>Automatizei rotinas de RH e processos operacionais com Excel e Python, reduzindo ciclos de semanas para <strong>2–3 dias</strong>.</li>
+                <li>Criei indicadores para tomada de decisão e identifiquei falhas de processo com impactos financeiros relevantes.</li>
+                <li>Mapeei inconsistências operacionais e propus controles de governança (incluindo horas extras irregulares).</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <div class="role-top">
+                <div>
+                  <p class="role-title">Engenheiro de Software / Consultor de Tecnologia — Freelancer (MEI)</p>
+                  <p class="role-meta">Rust • Flutter • Supabase/Postgres • multicloud • sites e produtos digitais</p>
+                </div>
+                <div class="when">nov/2023 – atual</div>
+              </div>
+              <ul>
+                <li>Desenvolvi sistema de prontuário eletrônico para terapias contínuas: <strong>CRUD + RBAC</strong>, Postgres/Supabase e deploy multicloud.</li>
+                <li>Conduzi assessoria tecnológica para implantação de clínica, gerando economia estimada <strong>~R$70k/ano</strong>.</li>
+                <li>Entreguei sites e produtos digitais (landing pages, portfólios, e-commerce e módulos CRUD) com Astro, WordPress, Grav e Go.</li>
+                <li>Padronizei documentação e handover (checklists e pipelines) para reduzir retrabalho e acelerar ajustes.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <div class="role-top">
+                <div>
+                  <p class="role-title">Estagiário Full Stack — Radom (Startup Web3)</p>
+                  <p class="role-meta">React • TypeScript • colaboração internacional</p>
+                </div>
+                <div class="when">fev/2023 – set/2023</div>
+              </div>
+              <ul>
+                <li>Desenvolvimento de interfaces em React/TypeScript e suporte pontual em back-end (Rust).</li>
+                <li>Trabalho com time internacional, entregas incrementais e revisão de código.</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <div class="role-top">
+                <div>
+                  <p class="role-title">Engenheiro Full Stack (Voluntário) — Eskhala (Web3)</p>
+                  <p class="role-meta">Solidity • Hardhat/Ethers • integrações</p>
+                </div>
+                <div class="when">abr/2022 – jan/2023</div>
+              </div>
+              <ul>
+                <li>Desenvolvimento de smart contracts em Solidity (Hardhat/Ethers.js) e integrações com front-end (React).</li>
+              </ul>
+            </article>
+
+            <article class="role">
+              <div class="role-top">
+                <div>
+                  <p class="role-title">Estagiário de TI — Mundo Equipamentos</p>
+                  <p class="role-meta">Google Apps Script • Python • automações internas</p>
+                </div>
+                <div class="when">jan/2021 – nov/2021</div>
+              </div>
+              <ul>
+                <li>Automação de planilhas/formulários (Google Apps Script), análises em Python e suporte a rotinas internas.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Projetos Selecionados</h2>
+          <div class="grid">
+            <div class="card">
+              <h3><span class="dot o"></span> Produtos</h3>
+              <ul>
+                <li><strong>PluriBeauty (ex-LOQK):</strong> plataforma para conectar clientes, profissionais e salões; desenvolvimento de site e app + suporte em operação e marketing.</li>
+                <li><strong>Cartão digital:</strong> joaodoval.vercel.app</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3><span class="dot"></span> Entregas</h3>
+              <ul>
+                <li>Plataforma para regularização da Naturologia — Associação Brasileira de Naturologia (2025).</li>
+                <li>API de fatiamento de objetos para impressão 3D via web — 3D Company (2024).</li>
+                <li>IA para triagens em teleconsultas — Notredame Intermédica (TriAi Chat, 2023).</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <h2>Formação, Idiomas</h2>
+          <div class="cols3">
+            <div class="card">
+              <h3><span class="dot g"></span> Formação</h3>
+              <ul>
+                <li>MBA em Marketing Digital — USP (2025)</li>
+                <li>Engenharia da Computação — FIAP (2023)</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3><span class="dot"></span> Idiomas</h3>
+              <ul>
+                <li>Português: nativo</li>
+                <li>Inglês: avançado</li>
+                <li>Espanhol: avançado</li>
+              </ul>
+            </div>
+</div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+</body>
+</html>
