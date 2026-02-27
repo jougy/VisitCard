@@ -15,7 +15,9 @@
       --accent:#5b8cff; --accent2:#22c55e; --accent3:#f59e0b;
       --chip:#f3f6ff;
       --shadow: 0 24px 70px rgba(0,0,0,.25);
-      --radius:18px;
+      --radius:28px;
+      --paper-alpha:.80;
+      --glass-alpha:.66;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -23,39 +25,108 @@
       margin:0;
       font-family: "Figtree", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color: var(--ink);
-      background:
-        radial-gradient(1200px 600px at 10% 0%, rgba(91,140,255,.35), transparent 60%),
-        radial-gradient(900px 520px at 90% 10%, rgba(34,197,94,.22), transparent 55%),
-        radial-gradient(900px 520px at 80% 90%, rgba(245,158,11,.18), transparent 55%),
-        linear-gradient(180deg, var(--bg0), var(--bg1));
+      background:linear-gradient(180deg, #0a1222 0%, #12386f 100%);
+      background-attachment:fixed;
+      background-repeat:no-repeat;
+      background-size:cover;
+      overflow-x:hidden;
       padding: 36px 16px;
     }
 
-    .wrap{max-width:1020px; margin:0 auto;}
+    .wrap{max-width:1020px; margin:0 auto; position:relative; z-index:2;}
     .toolbar{
       position:sticky;
       top:12px;
       z-index:10;
       display:flex;
+      align-items:center;
+      gap:10px;
       justify-content:flex-end;
       margin-bottom:10px;
     }
+    .lang-toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.35);
+      background:rgba(14,28,58,.44);
+      box-shadow:0 8px 22px rgba(8, 20, 50, .26);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+    .flag{
+      font-size:16px;
+      line-height:1;
+      opacity:.68;
+      transition:opacity .16s ease;
+    }
+    .flag.is-active{opacity:1;}
+    .switch{
+      position:relative;
+      width:44px;
+      height:24px;
+      display:inline-block;
+    }
+    .switch input{
+      opacity:0;
+      width:0;
+      height:0;
+    }
+    .slider{
+      position:absolute;
+      inset:0;
+      border-radius:999px;
+      background:rgba(132,166,233,.45);
+      border:1px solid rgba(255,255,255,.45);
+      cursor:pointer;
+      transition:background .2s ease;
+    }
+    .slider:before{
+      content:"";
+      position:absolute;
+      width:18px;
+      height:18px;
+      left:2px;
+      top:2px;
+      border-radius:999px;
+      background:#fff;
+      box-shadow:0 4px 10px rgba(0,0,0,.2);
+      transition:transform .2s ease;
+    }
+    .switch input:checked + .slider{
+      background:rgba(226,108,181,.55);
+    }
+    .switch input:checked + .slider:before{
+      transform:translateX(20px);
+    }
     .print-btn{
-      border:1px solid #2e3a56;
-      background:#101b31;
-      color:#e8eefc;
-      border-radius:10px;
+      border:1px solid rgba(255,255,255,.35);
+      background:linear-gradient(140deg, rgba(116,165,255,.45), rgba(223,25,149,.28));
+      color:#f7fbff;
+      border-radius:999px;
       padding:10px 14px;
       font-size:14px;
       font-weight:600;
       cursor:pointer;
+      box-shadow:0 12px 28px rgba(16, 42, 88, .30);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
     }
-    .print-btn:hover{background:#152341;}
+    .print-btn:hover{
+      background:linear-gradient(140deg, rgba(116,165,255,.54), rgba(223,25,149,.35));
+    }
     .paper{
       width:100%;
-      background:var(--paper);
+      background:rgba(255,255,255,var(--paper-alpha));
       border-radius:var(--radius);
-      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.48);
+      box-shadow:
+        0 30px 74px rgba(8, 20, 50, .26),
+        inset 0 1px 0 rgba(255,255,255,.65);
+      backdrop-filter: blur(14px) saturate(1.06);
+      -webkit-backdrop-filter: blur(14px) saturate(1.06);
       overflow:hidden;
       position:relative;
     }
@@ -68,6 +139,16 @@
         radial-gradient(700px 300px at 85% 8%, rgba(34,197,94,.08), transparent 70%),
         radial-gradient(700px 300px at 85% 92%, rgba(245,158,11,.08), transparent 70%);
       pointer-events:none;
+    }
+    .paper:after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(900px 280px at 14% 0%, rgba(143,182,255,.20), transparent 56%),
+        radial-gradient(900px 260px at 90% 8%, rgba(236,72,153,.14), transparent 58%);
+      pointer-events:none;
+      mix-blend-mode:screen;
     }
     .content{position:relative; padding:30px 34px 34px;}
 
@@ -94,6 +175,66 @@
       color:var(--muted);
       line-height:1.55;
     }
+    .contact-icon-link{
+      min-height:46px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap:8px;
+      position:relative;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.45);
+      background:linear-gradient(140deg, rgba(83,145,255,.66), rgba(223,25,149,.42));
+      color:#ffffff;
+      box-shadow:
+        0 16px 36px rgba(16, 42, 88, .32),
+        inset 0 1px 0 rgba(255,255,255,.42);
+      text-decoration:none;
+      font-weight:700;
+      letter-spacing:.01em;
+      padding:10px 14px;
+      transition:transform .12s ease, filter .2s ease, box-shadow .2s ease;
+    }
+    .contact-icon-link:hover{
+      transform:translateY(-2px);
+      filter:brightness(1.08);
+      box-shadow:
+        0 20px 42px rgba(16, 42, 88, .38),
+        inset 0 1px 0 rgba(255,255,255,.52);
+    }
+    .contact-icon-link svg{
+      width:20px;
+      height:20px;
+    }
+    .contact-icon-label{
+      font-size:13px;
+      line-height:1;
+      white-space:nowrap;
+    }
+    .contact-icon-link::after{
+      content:attr(data-tooltip);
+      position:absolute;
+      right:0;
+      top:calc(100% + 8px);
+      padding:8px 10px;
+      border-radius:10px;
+      background:rgba(10,16,30,.92);
+      border:1px solid rgba(255,255,255,.18);
+      color:#f4f8ff;
+      font-size:11px;
+      line-height:1.2;
+      white-space:nowrap;
+      opacity:0;
+      transform:translateY(-4px);
+      pointer-events:none;
+      transition:opacity .16s ease, transform .16s ease;
+      box-shadow:0 10px 24px rgba(0,0,0,.28);
+    }
+    .contact-icon-link:hover::after{
+      opacity:1;
+      transform:translateY(0);
+    }
+    .contact-print{display:none;}
     .contact strong{
       color:var(--ink);
       font-weight:650;
@@ -120,10 +261,15 @@
 
     .grid{display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:14px;}
     .card{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.82);
-      border-radius:14px;
+      border:1px solid rgba(255,255,255,.55);
+      background:rgba(255,255,255,var(--glass-alpha));
+      border-radius:20px;
       padding:12px 14px;
+      box-shadow:
+        0 16px 36px rgba(41, 74, 128, .14),
+        inset 0 1px 0 rgba(255,255,255,.66);
+      backdrop-filter: blur(10px) saturate(1.05);
+      -webkit-backdrop-filter: blur(10px) saturate(1.05);
     }
     .card h3{
       margin:0 0 8px;
@@ -148,9 +294,9 @@
 
     .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:2px;}
     .chip{
-      background:var(--chip);
-      border:1px solid #e4eaff;
-      color:#2b3b6b;
+      background:linear-gradient(140deg, rgba(116,165,255,.20), rgba(236,72,153,.10));
+      border:1px solid rgba(140,174,235,.42);
+      color:#273a64;
       padding:6px 9px;
       border-radius:999px;
       font-size:12px;
@@ -160,10 +306,15 @@
 
     .xp{display:grid; grid-template-columns:1fr; gap:12px; margin-top:10px;}
     .role{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.88);
-      border-radius:14px;
+      border:1px solid rgba(255,255,255,.56);
+      background:rgba(255,255,255,.72);
+      border-radius:20px;
       padding:12px 14px;
+      box-shadow:
+        0 16px 36px rgba(41, 74, 128, .14),
+        inset 0 1px 0 rgba(255,255,255,.68);
+      backdrop-filter: blur(10px) saturate(1.04);
+      -webkit-backdrop-filter: blur(10px) saturate(1.04);
     }
     .role-top{display:flex; align-items:flex-start; justify-content:space-between; gap:12px;}
     .role-title{margin:0; font-size:14px; font-weight:700; color:var(--ink);}
@@ -188,8 +339,18 @@
       }
       .toolbar{display:none;}
       .wrap{max-width:none;}
-      .paper{box-shadow:none; border-radius:0;}
+      .contact-icon-link{display:none;}
+      .contact-print{display:block;}
+      .paper{
+        box-shadow:none;
+        border-radius:0;
+        border:none;
+        background:#fff;
+        backdrop-filter:none;
+        -webkit-backdrop-filter:none;
+      }
       .paper:before{display:none;}
+      .paper:after{display:none;}
       .content{padding:0;}
       header{
         gap:10px;
@@ -211,6 +372,11 @@
       .card, .role{
         border-radius:10px;
         padding:8px 10px;
+        background:#fff;
+        border-color:#e3e8f4;
+        box-shadow:none;
+        backdrop-filter:none;
+        -webkit-backdrop-filter:none;
       }
       .card h3{
         margin-bottom:5px;
@@ -223,6 +389,8 @@
       .chip{
         font-size:10px;
         padding:4px 7px;
+        background:#fff;
+        border-color:#dbe3f3;
       }
       ul{font-size:11px; line-height:1.3;}
       li{margin:3px 0;}
@@ -247,7 +415,15 @@
 <body>
   <div class="wrap">
     <div class="toolbar">
-      <button class="print-btn" type="button" id="print-cv">Imprimir</button>
+        <div class="lang-toggle" aria-label="Seleção de idioma">
+          <span id="flag-pt" class="flag is-active" aria-hidden="true">🇧🇷</span>
+          <label class="switch" aria-label="Alternar idioma">
+            <input id="lang-toggle" type="checkbox" />
+            <span class="slider"></span>
+          </label>
+          <span id="flag-en" class="flag" aria-hidden="true">🇺🇸</span>
+        </div>
+	      <button class="print-btn" type="button" id="print-cv" data-i18n="print_button">Imprimir</button>
     </div>
     <main class="paper" role="document" aria-label="Currículo">
       <div class="content">
@@ -255,45 +431,54 @@
         <header>
           <div>
             <h1 class="name">JOÃO PAULO TADDEO DO VAL</h1>
-            <p class="headline">Engenheiro de Software • Full Stack • Dados (Python/Excel) • Rust/Flutter</p>
+            <p class="headline" data-i18n="headline">Engenheiro Full Stack • Cientista de dados • Web3 • Assessor de TI</p>
           </div>
           <div class="contact" aria-label="Contato">
-            <strong>Contato</strong><br/>
-            <a href="mailto:joao.tdoval@gmail.com">joao.tdoval@gmail.com</a><br/>
-            <a href="https://linkedin.com/in/joao-paulo-t-val/">linkedin.com/in/joao-paulo-t-val/</a><br/>
-            <a href="https://github.com/jougy">github.com/jougy</a><br/>
-            <a href="https://joaodoval.vercel.app">joaodoval.vercel.app</a>
+            <a class="contact-icon-link" href="index.html" aria-label="Cartão de visitas" data-i18n-title="contact_tooltip">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="3" y="6" width="18" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/>
+                <circle cx="8" cy="12" r="2" fill="currentColor"/>
+                <path d="M12 10h6M12 13h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+              <span class="contact-icon-label" data-i18n="contact_cta">Contato</span>
+            </a>
+            <div class="contact-print">
+              <strong data-i18n="contact_label">Contato</strong><br/>
+              <a href="mailto:joao.tdoval@gmail.com">joao.tdoval@gmail.com</a><br/>
+              <a href="https://linkedin.com/in/joao-paulo-t-val/">linkedin.com/in/joao-paulo-t-val/</a><br/>
+              <a href="https://github.com/jougy">github.com/jougy</a><br/>
+              <a href="https://joaodoval.vercel.app">joaodoval.vercel.app</a>
+            </div>
           </div>
         </header>
 
         <section class="section">
-          <h2>Resumo</h2>
-          <p class="summary">
-            Engenheiro de Computação com experiência em produtos digitais, automação de processos e consultoria de tecnologia.
-            Curto transformar problemas de negócio em soluções simples, mensuráveis e bem documentadas — com comunicação clara
-            com pessoas não técnicas. Atuo principalmente com back-end (Rust/Python), apps web/mobile (Flutter/React) e dados aplicada
-            (Excel avançado + Python), com entregas em multicloud e foco em segurança (RBAC), confiabilidade e performance.
-          </p>
+	          <h2 data-i18n="section_summary">Resumo</h2>
+		          <p class="summary" data-i18n="summary_text">
+		            Engenheiro de Computação com atuação em desenvolvimento full stack, ciência de dados e consultoria de TI.
+		            Entrego soluções orientadas a resultado, com foco em simplicidade, segurança e performance, traduzindo
+		            necessidades de negócio em produtos e automações aplicáveis.
+		          </p>
 
           <div class="grid" aria-label="Resumo técnico em colunas">
             <div class="card">
-              <h3><span class="dot"></span> Competências</h3>
-              <ul>
-                <li><strong>Back-end:</strong> Rust (Axum), Python, Node/TypeScript, C#, Solidity; APIs REST; Postgres/SQLx</li>
-                <li><strong>Front-end:</strong> Flutter (mobile/web), React, Next.js, Astro</li>
-                <li><strong>Dados/Automação:</strong> Excel/Google Sheets avançado; Python (pandas) para limpeza e indicadores</li>
-                <li><strong>Cloud/DevOps:</strong> Supabase, Cloudflare, Render, Backblaze B2, Docker, GitHub Actions (CI/CD)</li>
-                <li><strong>Arquitetura:</strong> RBAC, modular monolith, documentação técnica, práticas ágeis</li>
-              </ul>
-            </div>
+	              <h3><span class="dot"></span> <span data-i18n="card_skills_title">Competências</span></h3>
+	              <ul>
+	                <li data-i18n="skills_1"><strong>Back-end:</strong> Rust (Axum), Python, Node/TypeScript, C#, Solidity; APIs REST; Postgres/SQLx</li>
+	                <li data-i18n="skills_2"><strong>Front-end:</strong> Flutter (mobile/web), React, Next.js, Astro</li>
+	                <li data-i18n="skills_3"><strong>Dados/Automação:</strong> Excel/Google Sheets avançado; Python (pandas) para limpeza e indicadores</li>
+	                <li data-i18n="skills_4"><strong>Cloud/DevOps:</strong> Supabase, Cloudflare, Render, Backblaze B2, Docker, GitHub Actions (CI/CD)</li>
+	                <li data-i18n="skills_5"><strong>Arquitetura e processos:</strong> RBAC, documentação técnica e práticas ágeis</li>
+	              </ul>
+	            </div>
 
             <div class="card">
-              <h3><span class="dot g"></span> Destaques</h3>
-              <ul>
-                <li>Prontuário eletrônico com <strong>CRUD + RBAC</strong> e arquitetura <strong>multicloud</strong> (Render, Supabase, Cloudflare, Backblaze)</li>
-                <li>Assessoria para clínica de fisioterapia (Manaus): economia estimada <strong>~R$70k/ano</strong></li>
-                <li>Automação e analytics para RH/Operações: ciclos de semanas → <strong>2–3 dias</strong> (Excel + Python)</li>
-              </ul>
+	              <h3><span class="dot g"></span> <span data-i18n="card_highlights_title">Destaques</span></h3>
+	              <ul>
+	                <li data-i18n="highlights_1">Prontuário eletrônico com <strong>CRUD + RBAC</strong> e deploy <strong>multicloud</strong> para terapias contínuas.</li>
+	                <li data-i18n="highlights_2">Assessoria tecnológica para implantação de clínica (Manaus): economia estimada <strong>~R$70k/ano</strong>.</li>
+	                <li data-i18n="highlights_3">Automação para RH/Operações: redução de ciclos de semanas para <strong>2–3 dias</strong> (Excel + Python).</li>
+	              </ul>
               <div class="chips" aria-label="Tecnologias-chave">
                 <span class="chip">Rust</span><span class="chip">Axum</span><span class="chip">Flutter</span>
                 <span class="chip">Supabase</span><span class="chip">Cloudflare</span><span class="chip">Python</span>
@@ -301,123 +486,125 @@
               </div>
             </div>
           </div>
-        </section>
+	        </section>
 
-        <section class="section">
-          <h2>Experiência</h2>
-          <div class="xp">
+	        <section class="section">
+		          <h2 data-i18n="section_projects">Projetos Selecionados</h2>
+	          <div class="grid">
+	            <div class="card">
+		              <h3><span class="dot o"></span> <span data-i18n="projects_products_title">Produtos</span></h3>
+		              <ul>
+			                <li data-i18n="projects_products_1"><strong>Pluri Beauty:</strong> plataforma para conectar profissionais da beleza a novos clientes, com mapeamento de salões e profissionais, agendamento, pré-pagamento automático e portfólio profissional integrado.</li>
+			                <li data-i18n="projects_products_2"><strong>Cartão digital:</strong> exemplo: joaodoval.vercel.app</li>
+                      <li data-i18n="projects_products_3"><strong>Web sites:</strong> landing pages, portfólios e e-commerce.</li>
+                      <li data-i18n="projects_products_4"><strong>App mobile e desktop:</strong> programas sob demanda, como sistema de pontos, prontuários para clínicas, Pluri Beauty, mapas, agendamentos e automações.</li>
+		              </ul>
+		            </div>
+		            <div class="card">
+		              <h3><span class="dot"></span> <span data-i18n="projects_deliveries_title">Entregas</span></h3>
+		              <ul>
+		                <li data-i18n="projects_deliveries_1">Plataforma para regularização da Naturologia — Associação Brasileira de Naturologia (2025).</li>
+		                <li data-i18n="projects_deliveries_2">API de fatiamento de objetos para impressão 3D via web — 3D Company (2024).</li>
+		                <li data-i18n="projects_deliveries_3">IA para triagens em teleconsultas — Notredame Intermédica (TriAi Chat, 2023).</li>
+		              </ul>
+		            </div>
+		          </div>
+		        </section>
+
+	        <section class="section">
+		          <h2 data-i18n="section_experience">Experiência</h2>
+	          <div class="xp">
             <article class="role">
               <div class="role-top">
                 <div>
-                  <p class="role-title">Analista de Tecnologia (Dados e Automação) — Mundo Equipamentos</p>
-                  <p class="role-meta">Excel avançado • Python • indicadores • governança de processos</p>
-                </div>
-                <div class="when">fev/2025 – set/2025</div>
-              </div>
-              <ul>
-                <li>Automatizei rotinas de RH e processos operacionais com Excel e Python, reduzindo ciclos de semanas para <strong>2–3 dias</strong>.</li>
-                <li>Criei indicadores para tomada de decisão e identifiquei falhas de processo com impactos financeiros relevantes.</li>
-                <li>Mapeei inconsistências operacionais e propus controles de governança (incluindo horas extras irregulares).</li>
-              </ul>
-            </article>
-
-            <article class="role">
-              <div class="role-top">
-                <div>
-                  <p class="role-title">Engenheiro de Software / Consultor de Tecnologia — Freelancer (MEI)</p>
-                  <p class="role-meta">Rust • Flutter • Supabase/Postgres • multicloud • sites e produtos digitais</p>
-                </div>
-                <div class="when">nov/2023 – atual</div>
-              </div>
-              <ul>
-                <li>Desenvolvi sistema de prontuário eletrônico para terapias contínuas: <strong>CRUD + RBAC</strong>, Postgres/Supabase e deploy multicloud.</li>
-                <li>Conduzi assessoria tecnológica para implantação de clínica, gerando economia estimada <strong>~R$70k/ano</strong>.</li>
-                <li>Entreguei sites e produtos digitais (landing pages, portfólios, e-commerce e módulos CRUD) com Astro, WordPress, Grav e Go.</li>
-                <li>Padronizei documentação e handover (checklists e pipelines) para reduzir retrabalho e acelerar ajustes.</li>
-              </ul>
-            </article>
-
-            <article class="role">
-              <div class="role-top">
-                <div>
-                  <p class="role-title">Estagiário Full Stack — Radom (Startup Web3)</p>
-                  <p class="role-meta">React • TypeScript • colaboração internacional</p>
-                </div>
-                <div class="when">fev/2023 – set/2023</div>
-              </div>
-              <ul>
-                <li>Desenvolvimento de interfaces em React/TypeScript e suporte pontual em back-end (Rust).</li>
-                <li>Trabalho com time internacional, entregas incrementais e revisão de código.</li>
-              </ul>
-            </article>
+	                  <p class="role-title" data-i18n="exp_1_title">Analista de Tecnologia (Dados e Automação) — Mundo Equipamentos</p>
+	                  <p class="role-meta" data-i18n="exp_1_meta">Excel avançado • Python • indicadores • governança de processos</p>
+	                </div>
+	                <div class="when" data-i18n="exp_1_when">fev/2025 – set/2025</div>
+	              </div>
+	              <ul>
+	                <li data-i18n="exp_1_b1">Automatizei rotinas de RH e processos operacionais com Excel e Python, reduzindo ciclos de semanas para <strong>2–3 dias</strong>.</li>
+	                <li data-i18n="exp_1_b2">Criei indicadores para tomada de decisão e identifiquei falhas de processo com impactos financeiros relevantes.</li>
+	                <li data-i18n="exp_1_b3">Mapeei inconsistências operacionais e propus controles de governança (incluindo horas extras irregulares).</li>
+	              </ul>
+	            </article>
 
             <article class="role">
               <div class="role-top">
                 <div>
-                  <p class="role-title">Engenheiro Full Stack (Voluntário) — Eskhala (Web3)</p>
-                  <p class="role-meta">Solidity • Hardhat/Ethers • integrações</p>
-                </div>
-                <div class="when">abr/2022 – jan/2023</div>
-              </div>
-              <ul>
-                <li>Desenvolvimento de smart contracts em Solidity (Hardhat/Ethers.js) e integrações com front-end (React).</li>
-              </ul>
-            </article>
+	                  <p class="role-title" data-i18n="exp_2_title">Engenheiro de Software / Consultor de Tecnologia — Freelancer (MEI)</p>
+	                  <p class="role-meta" data-i18n="exp_2_meta">Rust • Flutter • Supabase/Postgres • multicloud • sites e produtos digitais</p>
+	                </div>
+	                <div class="when" data-i18n="exp_2_when">nov/2023 – atual</div>
+	              </div>
+	              <ul>
+	                <li data-i18n="exp_2_b1">Desenvolvi sistema de prontuário eletrônico para terapias contínuas: <strong>CRUD + RBAC</strong>, Postgres/Supabase e deploy multicloud.</li>
+	                <li data-i18n="exp_2_b2">Conduzi assessoria tecnológica para implantação de clínica, gerando economia estimada <strong>~R$70k/ano</strong>.</li>
+	                <li data-i18n="exp_2_b3">Entreguei sites e produtos digitais (landing pages, portfólios e módulos CRUD) com Astro, WordPress, Grav e Go.</li>
+	                <li data-i18n="exp_2_b4">Padronizei documentação e handover para reduzir retrabalho e acelerar ajustes.</li>
+	              </ul>
+	            </article>
 
             <article class="role">
               <div class="role-top">
                 <div>
-                  <p class="role-title">Estagiário de TI — Mundo Equipamentos</p>
-                  <p class="role-meta">Google Apps Script • Python • automações internas</p>
-                </div>
-                <div class="when">jan/2021 – nov/2021</div>
-              </div>
-              <ul>
-                <li>Automação de planilhas/formulários (Google Apps Script), análises em Python e suporte a rotinas internas.</li>
-              </ul>
-            </article>
+	                  <p class="role-title" data-i18n="exp_3_title">Estagiário Full Stack — Radom (Startup Web3)</p>
+	                  <p class="role-meta" data-i18n="exp_3_meta">React • TypeScript • colaboração internacional</p>
+	                </div>
+	                <div class="when" data-i18n="exp_3_when">fev/2023 – set/2023</div>
+	              </div>
+	              <ul>
+	                <li data-i18n="exp_3_b1">Desenvolvimento de interfaces em React/TypeScript e suporte pontual em back-end (Rust).</li>
+	                <li data-i18n="exp_3_b2">Trabalho com time internacional, entregas incrementais e revisão de código.</li>
+	              </ul>
+	            </article>
+
+            <article class="role">
+              <div class="role-top">
+                <div>
+	                  <p class="role-title" data-i18n="exp_4_title">Engenheiro Full Stack (Voluntário) — Eskhala (Web3)</p>
+	                  <p class="role-meta" data-i18n="exp_4_meta">Solidity • Hardhat/Ethers • integrações</p>
+	                </div>
+	                <div class="when" data-i18n="exp_4_when">abr/2022 – jan/2023</div>
+	              </div>
+	              <ul>
+	                <li data-i18n="exp_4_b1">Desenvolvimento de smart contracts em Solidity (Hardhat/Ethers.js) e integrações com front-end (React).</li>
+	              </ul>
+	            </article>
+
+            <article class="role">
+              <div class="role-top">
+                <div>
+	                  <p class="role-title" data-i18n="exp_5_title">Estagiário de TI — Mundo Equipamentos</p>
+	                  <p class="role-meta" data-i18n="exp_5_meta">Google Apps Script • Python • automações internas</p>
+	                </div>
+	                <div class="when" data-i18n="exp_5_when">jan/2021 – nov/2021</div>
+	              </div>
+	              <ul>
+	                <li data-i18n="exp_5_b1">Automação de planilhas/formulários (Google Apps Script), análises em Python e suporte a rotinas internas.</li>
+	              </ul>
+	            </article>
           </div>
         </section>
 
-        <section class="section">
-          <h2>Projetos Selecionados</h2>
-          <div class="grid">
-            <div class="card">
-              <h3><span class="dot o"></span> Produtos</h3>
-              <ul>
-                <li><strong>PluriBeauty (ex-LOQK):</strong> plataforma para conectar clientes, profissionais e salões; desenvolvimento de site e app + suporte em operação e marketing.</li>
-                <li><strong>Cartão digital:</strong> joaodoval.vercel.app</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3><span class="dot"></span> Entregas</h3>
-              <ul>
-                <li>Plataforma para regularização da Naturologia — Associação Brasileira de Naturologia (2025).</li>
-                <li>API de fatiamento de objetos para impressão 3D via web — 3D Company (2024).</li>
-                <li>IA para triagens em teleconsultas — Notredame Intermédica (TriAi Chat, 2023).</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section class="section">
-          <h2>Formação, Idiomas</h2>
-          <div class="cols3">
-            <div class="card">
-              <h3><span class="dot g"></span> Formação</h3>
-              <ul>
-                <li>MBA em Marketing Digital — USP (2025)</li>
-                <li>Engenharia da Computação — FIAP (2023)</li>
-              </ul>
-            </div>
-            <div class="card">
-              <h3><span class="dot"></span> Idiomas</h3>
-              <ul>
-                <li>Português: nativo</li>
-                <li>Inglês: avançado</li>
-                <li>Espanhol: avançado</li>
-              </ul>
-            </div>
+	        <section class="section">
+	          <h2 data-i18n="section_education_languages">Formação, Idiomas</h2>
+	          <div class="cols3">
+	            <div class="card">
+	              <h3><span class="dot g"></span> <span data-i18n="education_title">Formação</span></h3>
+	              <ul>
+	                <li data-i18n="education_1">MBA em Marketing Digital — USP (2025)</li>
+	                <li data-i18n="education_2">Engenharia da Computação — FIAP (2023)</li>
+	              </ul>
+	            </div>
+	            <div class="card">
+	              <h3><span class="dot"></span> <span data-i18n="languages_title">Idiomas</span></h3>
+	              <ul>
+	                <li data-i18n="language_1">Português: nativo</li>
+	                <li data-i18n="language_2">Inglês: avançado</li>
+	                <li data-i18n="language_3">Espanhol: avançado</li>
+	              </ul>
+	            </div>
 </div>
         </section>
 
@@ -427,9 +614,187 @@
   <script>
     (function () {
       const printBtn = document.getElementById('print-cv');
+      const langToggle = document.getElementById('lang-toggle');
+      const flagPt = document.getElementById('flag-pt');
+      const flagEn = document.getElementById('flag-en');
+
       if (printBtn) {
         printBtn.addEventListener('click', function () {
           window.print();
+        });
+      }
+
+      const translations = {
+        'pt-BR': {
+          page_title: 'CV — João Paulo Taddeo do Val',
+          print_button: 'Imprimir',
+          headline: 'Engenheiro Full Stack • Cientista de dados • Web3 • Assessor de TI',
+          contact_cta: 'Contato',
+          contact_tooltip: 'Acesse o cartão de visitas com informações de contato',
+          contact_label: 'Contato',
+          section_summary: 'Resumo',
+          summary_text: 'Engenheiro de Computação com atuação em desenvolvimento full stack, ciência de dados e consultoria de TI. Entrego soluções orientadas a resultado, com foco em simplicidade, segurança e performance, traduzindo necessidades de negócio em produtos e automações aplicáveis.',
+          card_skills_title: 'Competências',
+          skills_1: '<strong>Back-end:</strong> Rust (Axum), Python, Node/TypeScript, C#, Solidity; APIs REST; Postgres/SQLx',
+          skills_2: '<strong>Front-end:</strong> Flutter (mobile/web), React, Next.js, Astro',
+          skills_3: '<strong>Dados/Automação:</strong> Excel/Google Sheets avançado; Python (pandas) para limpeza e indicadores',
+          skills_4: '<strong>Cloud/DevOps:</strong> Supabase, Cloudflare, Render, Backblaze B2, Docker, GitHub Actions (CI/CD)',
+          skills_5: '<strong>Arquitetura e processos:</strong> RBAC, documentação técnica e práticas ágeis',
+          card_highlights_title: 'Destaques',
+          highlights_1: 'Prontuário eletrônico com <strong>CRUD + RBAC</strong> e deploy <strong>multicloud</strong> para terapias contínuas.',
+          highlights_2: 'Assessoria tecnológica para implantação de clínica (Manaus): economia estimada <strong>~R$70k/ano</strong>.',
+          highlights_3: 'Automação para RH/Operações: redução de ciclos de semanas para <strong>2–3 dias</strong> (Excel + Python).',
+          section_experience: 'Experiência',
+          exp_1_title: 'Analista de Tecnologia (Dados e Automação) — Mundo Equipamentos',
+          exp_1_meta: 'Excel avançado • Python • indicadores • governança de processos',
+          exp_1_when: 'fev/2025 – set/2025',
+          exp_1_b1: 'Automatizei rotinas de RH e processos operacionais com Excel e Python, reduzindo ciclos de semanas para <strong>2–3 dias</strong>.',
+          exp_1_b2: 'Criei indicadores para tomada de decisão e identifiquei falhas de processo com impactos financeiros relevantes.',
+          exp_1_b3: 'Mapeei inconsistências operacionais e propus controles de governança (incluindo horas extras irregulares).',
+          exp_2_title: 'Engenheiro de Software / Consultor de Tecnologia — Freelancer (MEI)',
+          exp_2_meta: 'Rust • Flutter • Supabase/Postgres • multicloud • sites e produtos digitais',
+          exp_2_when: 'nov/2023 – atual',
+          exp_2_b1: 'Desenvolvi sistema de prontuário eletrônico para terapias contínuas: <strong>CRUD + RBAC</strong>, Postgres/Supabase e deploy multicloud.',
+          exp_2_b2: 'Conduzi assessoria tecnológica para implantação de clínica, gerando economia estimada <strong>~R$70k/ano</strong>.',
+          exp_2_b3: 'Entreguei sites e produtos digitais (landing pages, portfólios e módulos CRUD) com Astro, WordPress, Grav e Go.',
+          exp_2_b4: 'Padronizei documentação e handover para reduzir retrabalho e acelerar ajustes.',
+          exp_3_title: 'Estagiário Full Stack — Radom (Startup Web3)',
+          exp_3_meta: 'React • TypeScript • colaboração internacional',
+          exp_3_when: 'fev/2023 – set/2023',
+          exp_3_b1: 'Desenvolvimento de interfaces em React/TypeScript e suporte pontual em back-end (Rust).',
+          exp_3_b2: 'Trabalho com time internacional, entregas incrementais e revisão de código.',
+          exp_4_title: 'Engenheiro Full Stack (Voluntário) — Eskhala (Web3)',
+          exp_4_meta: 'Solidity • Hardhat/Ethers • integrações',
+          exp_4_when: 'abr/2022 – jan/2023',
+          exp_4_b1: 'Desenvolvimento de smart contracts em Solidity (Hardhat/Ethers.js) e integrações com front-end (React).',
+          exp_5_title: 'Estagiário de TI — Mundo Equipamentos',
+          exp_5_meta: 'Google Apps Script • Python • automações internas',
+          exp_5_when: 'jan/2021 – nov/2021',
+          exp_5_b1: 'Automação de planilhas/formulários (Google Apps Script), análises em Python e suporte a rotinas internas.',
+          section_projects: 'Projetos Selecionados',
+          projects_products_title: 'Produtos',
+          projects_products_1: '<strong>Pluri Beauty:</strong> plataforma para conectar profissionais da beleza a novos clientes, com mapeamento de salões e profissionais, agendamento, pré-pagamento automático e portfólio profissional integrado.',
+          projects_products_2: '<strong>Cartão digital:</strong> exemplo: joaodoval.vercel.app',
+          projects_products_3: '<strong>Web sites:</strong> landing pages, portfólios e e-commerce.',
+          projects_products_4: '<strong>App mobile e desktop:</strong> programas sob demanda, como sistema de pontos, prontuários para clínicas, Pluri Beauty, mapas, agendamentos e automações.',
+          projects_deliveries_title: 'Entregas',
+          projects_deliveries_1: 'Plataforma para regularização da Naturologia — Associação Brasileira de Naturologia (2025).',
+          projects_deliveries_2: 'API de fatiamento de objetos para impressão 3D via web — 3D Company (2024).',
+          projects_deliveries_3: 'IA para triagens em teleconsultas — Notredame Intermédica (TriAi Chat, 2023).',
+          section_education_languages: 'Formação, Idiomas',
+          education_title: 'Formação',
+          education_1: 'MBA em Marketing Digital — USP (2025)',
+          education_2: 'Engenharia da Computação — FIAP (2023)',
+          languages_title: 'Idiomas',
+          language_1: 'Português: nativo',
+          language_2: 'Inglês: avançado',
+          language_3: 'Espanhol: avançado'
+        },
+        en: {
+          page_title: 'Resume — João Paulo Taddeo do Val',
+          print_button: 'Print',
+          headline: 'Full Stack Engineer • Data Scientist • Web3 • IT Advisor',
+          contact_cta: 'Contact',
+          contact_tooltip: 'Open the business card with contact information',
+          contact_label: 'Contact',
+          section_summary: 'Summary',
+          summary_text: 'Computer Engineer working across full stack development, data science, and IT consulting. I deliver outcome-driven solutions focused on simplicity, security, and performance, turning business needs into practical products and automations.',
+          card_skills_title: 'Skills',
+          skills_1: '<strong>Back-end:</strong> Rust (Axum), Python, Node/TypeScript, C#, Solidity; REST APIs; Postgres/SQLx',
+          skills_2: '<strong>Front-end:</strong> Flutter (mobile/web), React, Next.js, Astro',
+          skills_3: '<strong>Data/Automation:</strong> Advanced Excel/Google Sheets; Python (pandas) for cleaning and KPIs',
+          skills_4: '<strong>Cloud/DevOps:</strong> Supabase, Cloudflare, Render, Backblaze B2, Docker, GitHub Actions (CI/CD)',
+          skills_5: '<strong>Architecture & process:</strong> RBAC, technical documentation, and agile practices',
+          card_highlights_title: 'Highlights',
+          highlights_1: 'Electronic health record system with <strong>CRUD + RBAC</strong> and <strong>multicloud</strong> deployment for continuous therapies.',
+          highlights_2: 'Technology consulting for clinic implementation (Manaus): estimated savings of <strong>~BRL 70k/year</strong>.',
+          highlights_3: 'HR/Operations automation: cycle time reduced from weeks to <strong>2–3 days</strong> (Excel + Python).',
+          section_experience: 'Experience',
+          exp_1_title: 'Technology Analyst (Data and Automation) — Mundo Equipamentos',
+          exp_1_meta: 'advanced Excel • Python • KPIs • process governance',
+          exp_1_when: 'Feb/2025 – Sep/2025',
+          exp_1_b1: 'Automated HR and operational routines with Excel and Python, reducing cycles from weeks to <strong>2–3 days</strong>.',
+          exp_1_b2: 'Built decision-making indicators and identified process failures with relevant financial impact.',
+          exp_1_b3: 'Mapped operational inconsistencies and proposed governance controls (including irregular overtime).',
+          exp_2_title: 'Software Engineer / Technology Consultant — Freelancer (MEI)',
+          exp_2_meta: 'Rust • Flutter • Supabase/Postgres • multicloud • websites and digital products',
+          exp_2_when: 'Nov/2023 – Present',
+          exp_2_b1: 'Built an electronic health record system for continuous therapies: <strong>CRUD + RBAC</strong>, Postgres/Supabase, and multicloud deployment.',
+          exp_2_b2: 'Provided technology consulting for clinic implementation, generating estimated savings of <strong>~BRL 70k/year</strong>.',
+          exp_2_b3: 'Delivered websites and digital products (landing pages, portfolios, and CRUD modules) using Astro, WordPress, Grav, and Go.',
+          exp_2_b4: 'Standardized documentation and handover to reduce rework and speed up adjustments.',
+          exp_3_title: 'Full Stack Intern — Radom (Web3 Startup)',
+          exp_3_meta: 'React • TypeScript • international collaboration',
+          exp_3_when: 'Feb/2023 – Sep/2023',
+          exp_3_b1: 'Developed interfaces in React/TypeScript and provided occasional back-end support (Rust).',
+          exp_3_b2: 'Worked with an international team, incremental deliveries, and code review.',
+          exp_4_title: 'Full Stack Engineer (Volunteer) — Eskhala (Web3)',
+          exp_4_meta: 'Solidity • Hardhat/Ethers • integrations',
+          exp_4_when: 'Apr/2022 – Jan/2023',
+          exp_4_b1: 'Developed smart contracts in Solidity (Hardhat/Ethers.js) and front-end integrations (React).',
+          exp_5_title: 'IT Intern — Mundo Equipamentos',
+          exp_5_meta: 'Google Apps Script • Python • internal automation',
+          exp_5_when: 'Jan/2021 – Nov/2021',
+          exp_5_b1: 'Automated spreadsheets/forms (Google Apps Script), performed Python analysis, and supported internal routines.',
+          section_projects: 'Selected Projects',
+          projects_products_title: 'Products',
+          projects_products_1: '<strong>Pluri Beauty:</strong> platform connecting beauty professionals with new clients, featuring salon and professional mapping, scheduling, automatic prepayment, and integrated professional portfolios.',
+          projects_products_2: '<strong>Digital business card:</strong> example: joaodoval.vercel.app',
+          projects_products_3: '<strong>Websites:</strong> landing pages, portfolios, and e-commerce.',
+          projects_products_4: '<strong>Mobile and desktop apps:</strong> on-demand software, such as loyalty systems, clinic health records, Pluri Beauty, maps, scheduling, and automations.',
+          projects_deliveries_title: 'Deliveries',
+          projects_deliveries_1: 'Platform for Naturology regulation — Brazilian Naturology Association (2025).',
+          projects_deliveries_2: 'Web-based object slicing API for 3D printing — 3D Company (2024).',
+          projects_deliveries_3: 'AI for teleconsultation triage — Notredame Intermédica (TriAi Chat, 2023).',
+          section_education_languages: 'Education, Languages',
+          education_title: 'Education',
+          education_1: 'MBA in Digital Marketing — USP (2025)',
+          education_2: 'Computer Engineering — FIAP (2023)',
+          languages_title: 'Languages',
+          language_1: 'Portuguese: native',
+          language_2: 'English: advanced',
+          language_3: 'Spanish: advanced'
+        }
+      };
+
+      function setLanguage(lang) {
+        const selected = translations[lang] ? lang : 'pt-BR';
+        document.documentElement.lang = selected;
+        document.title = translations[selected].page_title;
+
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          const key = el.getAttribute('data-i18n');
+          const value = translations[selected][key];
+          if (typeof value === 'string') {
+            el.innerHTML = value;
+          }
+        });
+        document.querySelectorAll('[data-i18n-title]').forEach(function (el) {
+          const key = el.getAttribute('data-i18n-title');
+          const value = translations[selected][key];
+          if (typeof value === 'string') {
+            el.setAttribute('title', value);
+            el.setAttribute('data-tooltip', value);
+          }
+        });
+
+        if (langToggle) {
+          langToggle.checked = selected === 'en';
+        }
+        if (flagPt && flagEn) {
+          flagPt.classList.toggle('is-active', selected === 'pt-BR');
+          flagEn.classList.toggle('is-active', selected === 'en');
+        }
+
+        localStorage.setItem('cv-language', selected);
+      }
+
+      const stored = localStorage.getItem('cv-language');
+      setLanguage(stored === 'en' ? 'en' : 'pt-BR');
+
+      if (langToggle) {
+        langToggle.addEventListener('change', function () {
+          setLanguage(langToggle.checked ? 'en' : 'pt-BR');
         });
       }
     })();
